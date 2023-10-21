@@ -2,16 +2,30 @@ from flask import Blueprint, request, jsonify
 from http import HTTPStatus
 import os
 from multivac.lib.process import process_book, process_pdf
+from multivac.db import Book
 
 book = Blueprint("book", __name__, url_prefix="/book")
 
 @book.route("/all/", methods=["GET"])
 def read_books():
-    return {}
+    di_books = Book.all()        
+    return {
+        "books": di_books or {},
+        "status": HTTPStatus.OK
+    }, HTTPStatus.OK
 
 @book.route("/<uuid>", methods=["GET"])
 def read_book(uuid):
-    return {}
+    di_book = Book.query(uuid)
+    if not di_book:
+        return {
+            "message": "Book does not exist.",
+            "status": HTTPStatus.NOT_FOUND
+        }, HTTPStatus.NOT_FOUND
+    return {
+        "book": di_book,
+        "status": HTTPStatus.OK
+    }, HTTPStatus.OK
 
 @book.route("/", methods=["POST"])
 def create_book():

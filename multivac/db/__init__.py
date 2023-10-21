@@ -12,12 +12,29 @@ class Book():
         self.author = author or ""
         os.makedirs(f"{BOOK_DIR}/{self.uuid}")
 
+    @classmethod
+    def all(cls):
+        books = []
+        uuids = os.listdir(BOOK_DIR)
+        for uuid in uuids:
+            books.append(json.load(open(f"{BOOK_DIR}/{uuid}/metadata.json", "r")))
+        return books
+
+    @classmethod
+    def query(cls, uuid):
+        try:
+            book = json.load(open(f"{BOOK_DIR}/{uuid}/metadata.json", "r"))
+            return book
+        except FileNotFoundError as e:
+            return ""
+
     def get_folder(self):
         return f"{BOOK_DIR}/{self.uuid}"
 
     def init_metadata(self):
         f = open(f"{self.get_folder()}/metadata.json", "w")
         json.dump({
+            "uuid": str(self.uuid),
             "name": self.name,
             "author": self.author
         }, f)
