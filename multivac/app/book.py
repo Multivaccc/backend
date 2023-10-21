@@ -55,8 +55,14 @@ def create_book():
 
 @book.route("/<uuid>", methods=["PUT"])
 def update_book(uuid):
-    return {}
+    return {
+        "message": "Not implemented.",
+        "status": HTTPStatus.NOT_IMPLEMENTED
+    }, HTTPStatus.NOT_IMPLEMENTED
 
 @book.route("/<uuid>", methods=["DELETE"])
 def delete_book(uuid):
-    return {}
+    return {
+        "message": "Not implemented.",
+        "status": HTTPStatus.NOT_IMPLEMENTED
+    }, HTTPStatus.NOT_IMPLEMENTED
