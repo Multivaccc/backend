@@ -1,0 +1,16 @@
+README.md
+setup.py
+multivac/__init__.py
+multivac/config.py
+multivac/main.py
+multivac.egg-info/PKG-INFO
+multivac.egg-info/SOURCES.txt
+multivac.egg-info/dependency_links.txt
+multivac.egg-info/top_level.txt
+multivac/app/__init__.py
+multivac/app/book.py
+multivac/lib/__init__.py
+multivac/lib/generate.py
+multivac/lib/model.py
+multivac/lib/pipeline.py
+multivac/lib/prompt.py
