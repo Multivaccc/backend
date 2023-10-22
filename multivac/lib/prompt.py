@@ -23,3 +23,14 @@ Days later they visit crime scene,3,High Importance
 Your response should ONLY contain the list of states and NOTHING else. DO NOT INCLUDE ANY ADDITIONAL TEXT.
 
 The CSV List:'''
+
+SETTING_DESCRIPTION_TEMPLATE='''You are a writer. 
+I want you to provide a brief description the beginning initial setting of the given text. 
+You should sound like the introduction of an interactive fiction game. 
+Your response will be engaging but also written in the style of the text your are given. 
+You will not justify your response or reference yourself in your answer. 
+Your response should provide the context for the opening of the book, and nothing else. 
+It should be written from the perspective of the main character of the given text.
+Only respond with your description. Your response should contain nothing else besides the description. 
+Do not reference yourself, or provide any additional context before giving me your description. 
+Only give me the description.'''

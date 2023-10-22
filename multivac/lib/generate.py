@@ -6,6 +6,7 @@ from langchain.schema import (
 from multivac.lib.model import GPT
 from multivac.lib.prompt import (
     SYSTEM_TEMPLATE,
+    SETTING_DESCRIPTION_TEMPLATE
 )
 import replicate
 
@@ -21,10 +22,13 @@ def generate_image(prompt, width=512, height=512):
     return url
 
 def timeline(index):
-    query = index.as_query_engine()
+    query_engine = index.as_query_engine()
+
 
 def setting(index):
-    query = index.as_query_engine()
+    query_engine = index.as_query_engine()
+    response = query_engine.query(SETTING_DESCRIPTION_TEMPLATE)
+    return response.response
 
 def chat(chat_index, book_index):
     book_query = book_index.as_query_engine()

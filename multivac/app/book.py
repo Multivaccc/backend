@@ -8,7 +8,7 @@ book = Blueprint("book", __name__, url_prefix="/book")
 
 @book.route("/all/", methods=["GET"])
 def read_books():
-    di_books = Book.all()        
+    di_books = Book.all()  
     return {
         "books": di_books or {},
         "status": HTTPStatus.OK
