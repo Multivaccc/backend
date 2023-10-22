@@ -3,6 +3,7 @@ from http import HTTPStatus
 import os
 from multivac.db import Book
 from multivac.lib.process import process_chat
+from multivac.lib.pipeline import init_setting
 
 chat = Blueprint("chat", __name__, url_prefix="/book")
 
@@ -36,7 +37,11 @@ def create_chat(uuid):
             "status": HTTPStatus.NOT_FOUND
         }, HTTPStatus.NOT_FOUND
     book = Book(**book)
+    log, _ = book.get_chat()
+    if not log:
+        init_setting(book)
     log, index = process_chat(book, chat)
+    
     return {
         "log": log,
         "status": HTTPStatus.OK
