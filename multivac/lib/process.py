@@ -3,6 +3,8 @@ from llama_index import Document
 from uuid import uuid4
 from multivac import DB_DIR
 from multivac.db import Book
+from PyPDF2 import PdfReader
+
 
 def _vectorize(book):
     folder = book.get_folder()
@@ -13,6 +15,19 @@ def _vectorize(book):
 
 def process_pdf(book):
     return _vectorize(book)
+
+def process_states(states):
+    states = states.split("\n\n")[1:][0]
+    li_states = states.split("\n")
+    li_states = [[",".join(st.split(",")[0:-2]), st.split(",")[-2], st.split(",")[-1]] for st in li_states]
+    return li_states
+
+def parse_pdf(book):
+    reader = PdfReader(f"{book.get_folder()}/__raw__.pdf")
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text()
+    return text
 
 def _initialize_book(name, author):
     uuid = uuid4()

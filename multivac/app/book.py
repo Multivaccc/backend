@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from http import HTTPStatus
 import os
 from multivac.lib.process import process_book, process_pdf
+from multivac.lib.pipeline import extract_states
 from multivac.db import Book
 
 book = Blueprint("book", __name__, url_prefix="/book")
@@ -47,6 +48,7 @@ def create_book():
     folder = book.get_folder()
     pdf.save(f"{folder}/__raw__.pdf")
     _ = process_pdf(book)
+    _ = extract_states(book)
     return {
         "book": book.json(),
         "status": HTTPStatus.OK

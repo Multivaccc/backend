@@ -10,7 +10,7 @@ BOOK_DIR = f"{DB_DIR}/book"
 
 class Book():
     
-    def __init__(self, uuid, name, author, write=False):
+    def __init__(self, uuid, name, author, timestamp=None, write=False):
         self.uuid = uuid
         self.name = name or ""
         self.author = author or ""
@@ -41,7 +41,7 @@ class Book():
     def get_chat(self):
         folder = self.get_folder()
         persist_dir = f"{folder}/chat"
-        chat = json.load(open(f"{folder}/log.json", "r+"))
+        chat = json.load(open(f"{folder}/log.json", "r"))
         index = None
         if os.listdir(persist_dir):
             index = load_index_from_storage(storage_context=StorageContext.from_defaults(
@@ -51,22 +51,57 @@ class Book():
             ))
         return chat, index
 
+    def get_timestamp(self):
+        f = open(f"{self.get_folder()}/metadata.json", "r")
+        di = json.load(f)
+        time = di["timestamp"]
+        f.close()
+        return time
+
+    def get_states(self):
+        f = open(f"{self.get_folder()}/states.tsv", "r")
+        states = "\n".join(f.readlines())
+        f.close()
+        return states
+    
+    def get_index(self):
+        folder = self.get_folder()
+        persist_dir = f"{folder}/index"
+        index = load_index_from_storage(storage_context=StorageContext.from_defaults(
+            docstore=SimpleDocumentStore.from_persist_dir(persist_dir=persist_dir),
+            vector_store=SimpleVectorStore.from_persist_dir(persist_dir=persist_dir),
+            index_store=SimpleIndexStore.from_persist_dir(persist_dir=persist_dir)
+        ))
+        return index
+
     def write_chat(self, log):
         folder = self.get_folder()
-        json.dump(log, open(f"{folder}/log.json", "w+"))
+        json.dump(log, open(f"{folder}/log.json", "w"))
 
     def init_metadata(self):
         f = open(f"{self.get_folder()}/metadata.json", "w")
         json.dump({
             "uuid": str(self.uuid),
             "name": self.name,
-            "author": self.author
+            "author": self.author,
+            "timestamp": 0
         }, f)
         f.close()
+
+    def increment(self):
+        f = open(f"{self.get_folder()}/metadata.json", "r")
+        di = json.load(f)
+        f.close()
+        di["timestamp"] += 1
+        f = open(f"{self.get_folder()}/metadata.json", "w")
+        json.dump(di, f)
+        f.close()
+        return di["timestamp"]
 
     def json(self):
         return {
             "uuid": self.uuid,
             "name": self.name,
-            "author": self.author
+            "author": self.author,
+            "timestamp": self.get_timestamp()
         }

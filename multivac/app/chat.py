@@ -3,7 +3,7 @@ from http import HTTPStatus
 import os
 from multivac.db import Book
 from multivac.lib.process import process_chat
-from multivac.lib.pipeline import init_setting
+from multivac.lib.pipeline import init_setting, run_action, get_image
 
 chat = Blueprint("chat", __name__, url_prefix="/book")
 
@@ -24,12 +24,7 @@ def read_chat(uuid):
 
 @chat.route("/<uuid>/chat/", methods=["POST"])
 def create_chat(uuid):
-    chat = request.json["chat"]
-    if not chat:
-        return {
-            "message": "Invalid chat.",
-            "status": HTTPStatus.BAD_REQUEST
-        }, HTTPStatus.BAD_REQUEST
+    str_chat = request.json.get("chat", None)
     book = Book.query(uuid)
     if not book:
         return {
@@ -38,10 +33,28 @@ def create_chat(uuid):
         }, HTTPStatus.NOT_FOUND
     book = Book(**book)
     log, _ = book.get_chat()
-    if not log:
-        init_setting(book)
-    log, index = process_chat(book, chat)
-    
+    url = None
+    if not str_chat and log:
+        return {
+            "message": "Invalid chat.",
+            "status": HTTPStatus.BAD_REQUEST
+        }, HTTPStatus.BAD_REQUEST
+    if not str_chat:
+        process_chat(book, {
+            "content": "_",
+            "type": "_",
+            "imageURL": ""
+        })
+        log, _ = init_setting(book)
+    else:
+        log, chat_index = process_chat(book, str_chat)
+        book_index = book.get_index()
+        log, _, nt = run_action(chat_index, book_index, book, log, str_chat)
+        url = ""
+        if (nt%3 == 0):
+            url = get_image(log[-1])
+            print(url)
+        log[-1] = { "content": log[-1]['content'],"type": log[-1]['type'], "imageURL": url}
     return {
         "log": log,
         "status": HTTPStatus.OK
