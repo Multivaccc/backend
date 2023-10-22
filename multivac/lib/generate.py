@@ -19,3 +19,13 @@ def generate_image(prompt, width=512, height=512):
     output = replicate.run(model,input=input)
     url = output[0]
     return url
+
+def timeline(index):
+    query = index.as_query_engine()
+
+def setting(index):
+    query = index.as_query_engine()
+
+def chat(chat_index, book_index):
+    book_query = book_index.as_query_engine()
+    chat_query = chat_index.as_query_engine()

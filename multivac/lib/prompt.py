@@ -4,7 +4,7 @@ from langchain.prompts import PromptTemplate
 SYSTEM_TEMPLATE = ""
 
 STATE_EXTRACTION_TEMPLATE= '''
-Given a text, I want you to extract what the major plot points are and place each of these events into a CSV format list. 
+Given the text, I want you to extract what the major plot points are and place each of these events into a CSV format list. 
 You should place them in chronological order, and assign each of them a time stamp depending on when they happen in the book.
 These timestamps should be spaced at irregular intervals. So some would be closer together by timestamp than others, but they would NOT be spaced at regular intervals. 
 Provide granular timestamps and detail on minor events in between major plot points as well. 
