@@ -53,7 +53,7 @@ class Book():
 
     def write_chat(self, log):
         folder = self.get_folder()
-        json.dump(log, open(f"{self.get_folder()}/log.json", "w+"))
+        json.dump(log, open(f"{folder}/log.json", "w+"))
 
     def init_metadata(self):
         f = open(f"{self.get_folder()}/metadata.json", "w")

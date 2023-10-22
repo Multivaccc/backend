@@ -1,15 +1,18 @@
 from datetime import datetime
-from .generate import setting
 from multivac.db import Book
+from .generate import setting
+from .process import process_chat
+from .prompt import SETTING_DESCRIPTION_TEMPLATE
 
 def extract_states():
     pass
 
-def generate_settings(uuid):
-    book = Book.query(uuid)
-    if not book:
-        return "Book does not exist"
-    book = Book(**book)
+def init_setting(book):
     _, index = book.get_chat()
-    settings = setting(index)
-    return settings.settings
+    initial_setting = setting(index)
+    di_setting = {
+        "content": initial_setting,
+        "type": "agent"
+    }
+    log, _ = process_chat(book, di_setting)
+    return log
