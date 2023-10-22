@@ -3,7 +3,9 @@ from langchain.schema import (
     AIMessage,
     HumanMessage
 )
-from multivac.lib.model import GPT
+from langchain.agents import initialize_agent
+from llama_index.langchain_helpers.memory_wrapper import GPTIndexChatMemory
+from multivac.lib.model import CLAUDE
 from multivac.lib.prompt import (
     SYSTEM_TEMPLATE,
     SETTING_DESCRIPTION_TEMPLATE
@@ -22,7 +24,14 @@ def generate_image(prompt, width=512, height=512):
     return url
 
 def timeline(index):
-    query_engine = index.as_query_engine()
+    memory = GPTIndexChatMemory(
+        index=index,
+        memory_key="chat_history",
+        query_kwargs={"response_mode": "compact"},
+        return_source=True,
+        return_messages=True,
+    )
+    
 
 
 def setting(index):
