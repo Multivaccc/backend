@@ -51,7 +51,7 @@ def create_chat(uuid):
         book_index = book.get_index()
         log, _, nt = run_action(chat_index, book_index, book, log, str_chat)
         url = ""
-        if (nt%3 == 0):
+        if (nt%2 == 0):
             url = get_image(log[-1])
             print(url)
         log[-1] = { "content": log[-1]['content'],"type": log[-1]['type'], "imageURL": url}

@@ -9,8 +9,10 @@ multivac.egg-info/dependency_links.txt
 multivac.egg-info/top_level.txt
 multivac/app/__init__.py
 multivac/app/book.py
+multivac/db/__init__.py
 multivac/lib/__init__.py
 multivac/lib/generate.py
 multivac/lib/model.py
 multivac/lib/pipeline.py
+multivac/lib/process.py
 multivac/lib/prompt.py

@@ -30,13 +30,14 @@ def generate_image_prompt(prompt):
     return response.content
 
 def generate_image(prompt, width=512, height=512):
-    model = "doriandarko/sdxl-hiroshinagai:563a66acc0b39e5308e8372bed42504731b7fec3bc21f2fcbea413398690f3ec"
+    hiroshi_model = "doriandarko/sdxl-hiroshinagai:563a66acc0b39e5308e8372bed42504731b7fec3bc21f2fcbea413398690f3ec"
+    sdxl_model = "stability-ai/sdxl:c221b2b8ef527988fb59bf24a8b97c4561f1c671f73bd389f866bfb27c061316"
     input = {
         "prompt": prompt,
         "width": width,
         "height": height,
     }
-    output = replicate.run(model,input=input)
+    output = replicate.run(sdxl_model,input=input)
     url = output[0]
     return url
 
